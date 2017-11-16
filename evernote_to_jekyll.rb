@@ -21,7 +21,6 @@ def print_rename_commands_for_files(path_to_HTML_files)
   end
 end
 
-def evernote_to_jekyll
-  directory = '/Users/sfxu/projects/goooooouwa.github.io/inbox'
+def evernote_to_jekyll(directory)
   print_rename_commands_for_files(Dir["#{directory}/*.html"])
 end
