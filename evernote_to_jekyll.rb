@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'shellwords'
 
 def to_jekyll_name_group(html_file_location)
   page = Nokogiri::HTML(open(html_file_location))
@@ -15,9 +16,9 @@ end
 def print_rename_commands_for_files(path_to_HTML_files)
   path_to_HTML_files.each do |path_to_HTML_file|
     name_group = to_jekyll_name_group(path_to_HTML_file)
-    print "mv '#{name_group[:html_filename]}' '#{name_group[:jekyll_filename]}'\n"
+    print "mv #{name_group[:html_filename].shellescape} #{name_group[:jekyll_filename].shellescape}\n"
     # not every html file has a corresponding resources folder
-    print "mv '#{name_group[:html_resources]}' '#{name_group[:jekyll_resources]}'\n"
+    print "mv #{name_group[:html_resources].shellescape} #{name_group[:jekyll_resources].shellescape}\n"
   end
 end
 
