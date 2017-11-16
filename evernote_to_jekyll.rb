@@ -1,15 +1,18 @@
 require 'nokogiri'
 require 'shellwords'
+require 'pathname'
+
 
 def to_jekyll_name_group(html_file_location)
+  html_filename = Pathname.new(html_file_location).basename
   page = Nokogiri::HTML(open(html_file_location))
   created = page.css('meta[name=created]')[0].attributes["content"].value
   prefix = created.split[0]
   {
-    html_filename: "#{page.title}.html",
-    html_resources: "#{page.title}.resources",
-    jekyll_filename: "#{prefix}-#{page.title}.html",
-    jekyll_resources: "#{prefix}-#{page.title}"
+    html_filename: "#{html_filename}.html",
+    html_resources: "#{html_filename}.resources",
+    jekyll_filename: "#{prefix}-#{html_filename}.html",
+    jekyll_resources: "#{prefix}-#{html_filename}"
   }
 end
 
