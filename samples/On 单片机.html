@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.13 (455674)"/><meta name="author" content="Greg &lt;gouwa5700@gmail.com&gt;"/><meta name="created" content="2012-02-11 09:32:24 +0000"/><meta name="source" content="mail.smtp"/><meta name="subject-date" content="2012-02-11 09:32:20 +0000"/><meta name="updated" content="2013-05-04 05:35:29 +0000"/><title>On 单片机</title></head><body><div style="margin: 0px 2px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div>
+<div style="margin: 0px 1px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div>
+<div style="padding: 4px; background-color: #c3d9ff;"><h3 style="margin:0px 3px;font-family:sans-serif">Sent to you by Greg via Google Reader:</h3></div>
+<div style="margin: 0px 1px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div>
+<div style="margin: 0px 2px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div>
+<div style="font-family:sans-serif;overflow:auto;width:100%;margin: 0px 10px"><h2 style="margin: 0.25em 0 0 0"/><div><a shape="rect" href="http://gouwa5700.blogspot.com/2010/07/on.html">On 单片机</a></div>
+<div style="margin-bottom: 0.5em">via <a shape="rect" href="http://gouwa5700.blogspot.com/">Heuristics</a> by Greg Xu on 11/21/10</div><br clear="none" style="display:none"/>
+     Q : 我怎么能控制单片机及其外设执行我希望的工作？A : 写代码，也即写指令。<br clear="none"/>
+     任何属于冯·诺依曼计算模型的机器均如此：执行指令。基于各种逻辑硬件，单片机便可以作为嵌入式系统，以控制外围设备，执行任何希望的工作（由于世界的数学性，决定了计算本身可以处理大量事情）。<br clear="none"/>
+     那么，关键的两个问题是：<br clear="none"/>
+<ol><li>如何连接外围设备？</li><li>如何编写代码以控制设备？</li></ol>    <span style="color:lime"> <span style="color:#cc0000">问题 1 需要电路原理的知识；问题 2 即要你了解器件的控制模式。</span></span><br clear="none"/>
+     问题 1 和 2 是打通控制之路的双臂。<br clear="none"/>
+     现在单谈 2 ，各个器件的控制模式：<br clear="none"/>
+     基本且不可少的是——RAM，SFR，I/O，定时/计数器，中断。下面就一个个来，<br clear="none"/>
+     <span style="background-color:lime;color:white">RAM</span>：片内和片外独立编址，使用不同的指令访问；片内分为RAM块和SFR块，前者128B，编址00H~7FH，其中00H~1FH（共32B）为四组每8个寄存器组（R0~R7），20H~2FH（共16B）为位寻址区（16*8=128bit，映射00H~7FH），30H~7FH（共80B）为数据缓冲区，多用于堆栈的数据空间，而80H~FFH（共128B）则为SFR区，其中12个（能被8整除的）寄存器可位寻址（映射80H~FFH）。<br clear="none"/>
+     <span style="background-color:magenta;color:white">SFR </span>: 具体对象列表如下，<br clear="none"/>
+<ol><li>程序与数据指针控制：PC（程序计数器） , SP（栈指针） , DPTR（数据指针） ;</li><li>累加器与寄存器：ACC , B ;</li><li>I/O口锁存器：P0 , P1 , P2 , P3 ;</li><li>定时控制：T0（TH0、TL0） , T1（TH1、TL1）, TMOD ;</li><li>中断控制：TCON（高四位为T0、T1的控制器和定时/计数溢出标志，低四位为外部中断0和1的中断触发方式选择和中断产生标志），IE（开放或屏蔽各中断源），IP（独立控制中断优先级）</li><li>串行控制：SCON（设置工作方式和查询接受、发送中断产生标志），SBUF（串行数据缓冲器）</li><li>程序状态寄存器：PSW</li></ol>     <span style="background-color:red;color:white">I/O</span>：是单片机与外设连接的重要接口，它是单片机的标志，通过向四个I/O口锁存器写入/读取数据，可以实现许多应用。<br clear="none"/>
+     <span style="background-color:orange;color:white">定时/计数器</span>：由TMOD，TCON控制工作方式，T0，T1执行定时计数。TMOD高低四位分别控制T1、T0，（TMOD八个位为两组四个控制位：GATE，C/T，M1，M0）C/T=1，工作在计数方式，使用外部引脚P3.4、P3.5输入脉冲计数，为0在定时方式，使用机器周期作计数脉冲，GATE=1，T0和T1的启动分别受芯片引脚INT0和INT1的控制，为0则无关，M0、M1组合选择工作模式（1/4）；TCON的高四位为TF1（T1计数溢出时，该位置位，在允许T1中断时，向CPU发送中断请求，CPU响应后清0，也可由程序查询或清0）,TR1（T1运行控制位，为1时启动T1开始计数，TR1=0时，T1停止计数）,TF0（同T1）,TR0（同T1）。<br clear="none"/>
+     <span style="background-color:#0b5394;color:white">中断</span>：5个中断源，外部INT0和INT1，时钟溢出中断TF0和TF1，以及一个片内（串口中断）请求T1或R1。TCON低四位用于外部中断请求控制，各位为IE1（为外部中断INT1请求标志，IE1=1表示外部中断向CPU请求中断，响应后清0），IT1（为外部中断INT1触发控制位，IT1=0为电平触发，IT1=1为边沿触发），IE0（同IE1），IT0（同IT1）。串口中断T1和R1位于SCON中，CPU响应中断后不自动清0。CPU响应上述各中断请求后，会自动根据中断请求的类型自动跳转至相应的中断服务入口处。IE、IP略。<div><img src="On%20%E5%8D%95%E7%89%87%E6%9C%BA.resources/8A35BC64-670F-4075-8E07-2F3F31E7D6F5.gif" height="1" width="1"/></div></div>
+<br clear="none"/>
+<div style="margin: 0px 2px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div>
+<div style="margin: 0px 1px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div>
+<div style="padding: 4px; background-color: #c3d9ff;"><h3 style="margin:0px 3px;font-family:sans-serif">Things you can do from here:</h3>
+<ul style="font-family:sans-serif"><li><a shape="rect" href="http://www.google.com/reader/view/feed%2Fhttp%3A%2F%2Fgouwa5700.blogspot.com%2Ffeeds%2Fposts%2Fdefault?source=email">Subscribe to Heuristics</a> using <b>Google Reader</b></li><li><a shape="rect" href="http://www.google.com/reader/?source=email">Get started using Google Reader</a> to easily keep up with <b>all your favorite sites</b></li></ul></div>
+<div style="margin: 0px 1px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div>
+<div style="margin: 0px 2px; padding-top: 1px;    background-color: #c3d9ff; font-size: 1px !important;    line-height: 0px !important;"> </div></body></html>
