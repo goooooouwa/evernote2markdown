@@ -23,5 +23,9 @@ def print_rename_commands_for_files(path_to_HTML_files)
 end
 
 def evernote_to_jekyll(directory)
-  print_rename_commands_for_files(Dir["#{directory}/*.html"])
+	jekyll_imcompatible_files = Dir["#{directory}/*.html"].select do |path_to_HTML_file|
+    !/[0-9]{4}-[0-9]{2}-[0-9]{2}-*\.html/.match? File.basename(path_to_HTML_file)
+  end
+
+  print_rename_commands_for_files(jekyll_imcompatible_files)
 end
