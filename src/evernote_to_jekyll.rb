@@ -4,7 +4,7 @@ require 'shellwords'
 def to_jekyll_name_group(path_to_HTML_file)
   page = Nokogiri::HTML(open(path_to_HTML_file))
   date_prefix = page.css('meta[name=created]')[0].attributes["content"].value.split[0]
-  html_filename = File.basename(path_to_HTML_file, File.extname(path))
+  html_filename = File.basename(path_to_HTML_file, File.extname(path_to_HTML_file))
   {
     html_filename: "#{html_filename}.html",
     html_resources: "#{html_filename}.resources",
