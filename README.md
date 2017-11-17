@@ -16,7 +16,7 @@ export PATH_TO_HTML = /path/to/your/exported/note/files
 ./bin/generate_rename_commands.sh # the `rename_commands.sh` will be generated in the `out` directory and a copy will be send to $PATH_TO_HTML ready for use.
 ```
 
-2. Examine the generated `rename_commands.sh` script,
+2. Examine the generated `rename_commands.sh` script in `out` directory,
 3. If everything looks good, go to your `$PATH_TO_HTML` and run the script:
 
 ```bash
