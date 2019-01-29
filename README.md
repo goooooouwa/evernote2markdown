@@ -5,7 +5,7 @@ scripts for rename exported evernote HTML files and resources to jekyll format
 
 ```bash
 bundle install
-export PATH_TO_HTML = /path/to/your/exported/note/files
+export PATH_TO_HTML=/path/to/your/exported/note/files
 ```
 
 ## Run
