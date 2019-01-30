@@ -3,32 +3,36 @@
 require 'nokogiri'
 require 'shellwords'
 
-def to_jekyll_name_group(path_to_HTML_file)
-  page = Nokogiri::HTML(open(path_to_HTML_file))
-  date_prefix = page.css('meta[name=created]')[0].attributes['content'].value.split[0]
-  html_filename = File.basename(path_to_HTML_file, File.extname(path_to_HTML_file))
+def html_to_jekyll(html_path)
+  html_page = Nokogiri::HTML(open(html_path))
+  date_prefix = html_page.css('meta[name=created]')[0]
+                         .attributes['content']
+                         .value.split[0]
+  filename = File.basename(html_path, File.extname(html_path))
   {
-    html_filename: "#{html_filename}.html",
-    html_resources: "#{html_filename}.resources",
-    jekyll_filename: "#{date_prefix}-#{html_filename}.html",
-    jekyll_resources: "#{date_prefix}-#{html_filename}"
+    html_filename: "#{filename}.html",
+    html_resources: "#{filename}.resources",
+    jekyll_filename: "#{date_prefix}-#{filename}.html",
+    jekyll_resources: "#{date_prefix}-#{filename}"
   }
 end
 
-def print_rename_commands_for_files(path_to_HTML_files)
-  path_to_HTML_files.each do |path_to_HTML_file|
-    name_group = to_jekyll_name_group(path_to_HTML_file)
-    print "mv #{name_group[:html_filename].shellescape} #{name_group[:jekyll_filename].shellescape}\n"
+def get_rename_commands(html_paths)
+  commands = ''
+  html_paths.each do |html_path|
+    name_group = html_to_jekyll(html_path)
+    commands += "mv #{name_group[:html_filename].shellescape} #{name_group[:jekyll_filename].shellescape}\n"
     # not every html file has a corresponding resources folder
-    print "mv #{name_group[:html_resources].shellescape} #{name_group[:jekyll_resources].shellescape}\n"
+    commands += "mv #{name_group[:html_resources].shellescape} #{name_group[:jekyll_resources].shellescape}\n"
   end
+  commands
 end
 
-def evernote_to_jekyll(directory)
-  jekyll_imcompatible_files = Dir["#{directory}/*.html"].reject do |path_to_HTML_file|
-    file_basename = File.basename(path_to_HTML_file, File.extname(path_to_HTML_file))
+def evernote_to_jekyll(dir)
+  sanitized_html_paths = Dir["#{dir}/*.html"].reject do |html_path|
+    file_basename = File.basename(html_path, File.extname(html_path))
     /[0-9]{4}-[0-9]{2}-[0-9]{2}-.*/.match? file_basename
   end
 
-  print_rename_commands_for_files(jekyll_imcompatible_files)
+  get_rename_commands(sanitized_html_paths)
 end

@@ -2,4 +2,12 @@ source 'https://rubygems.org'
 
 gem 'nokogiri'
 
-gem 'rspec'
+group :test do
+  gem 'rspec'
+  gem 'simplecov'
+end
+
+group :test, :development do
+  gem 'ruby-debug-ide'
+  gem 'debase'
+end
