@@ -5,15 +5,15 @@ scripts for rename exported evernote HTML files and resources to jekyll format
 
 ```bash
 bundle install
-export PATH_TO_HTML=/path/to/your/exported/html/note/files
 ```
 
-## Rename HTML note files
+## Add date prefix to HTML note files
 
 1. Generate the `rename.sh` to rename your exported note files:
 
 ```bash
-./bin/generate.sh # the `rename.sh` will be generated in the `out` directory and a copy will be send to $PATH_TO_HTML
+export PATH_TO_HTML=/path/to/your/exported/html/note/files
+./bin/install.sh # cp `rename.sh` to $PATH_TO_HTML
 ```
 
 2. Examine the generated `rename.sh` script in `out` directory,
@@ -28,8 +28,18 @@ Hopefully, you will now have all your exported note files renamed to jekyll form
 ## insert front matter to HTML note files
 
 ```bash
+export PATH_TO_HTML=/path/to/your/exported/html/note/files
 ./bin/insert.rb
 ```
+
+## Add date prefix to markdown files
+
+### prerequesities
+
+### Run
+export PATH_TO_HTML=/path/to/your/exported/html/note/files
+export MD_PATH=/path/to/markdown/files
+./bin/add_a
 
 ## Test
 
