@@ -14,6 +14,7 @@ do
   then
     echo "match found: $md_filename"
     echo "mv $line.md $md_filename" >> ./out/rename_markdown.sh
+    cp ./out/rename_markdown.sh "$MD_PATH"
   fi
 done <"$file"
 
