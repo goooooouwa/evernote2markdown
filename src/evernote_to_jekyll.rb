@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 require 'shellwords'
 
 def to_jekyll_name_group(path_to_HTML_file)
   page = Nokogiri::HTML(open(path_to_HTML_file))
-  date_prefix = page.css('meta[name=created]')[0].attributes["content"].value.split[0]
+  date_prefix = page.css('meta[name=created]')[0].attributes['content'].value.split[0]
   html_filename = File.basename(path_to_HTML_file, File.extname(path_to_HTML_file))
   {
     html_filename: "#{html_filename}.html",
@@ -23,10 +25,10 @@ def print_rename_commands_for_files(path_to_HTML_files)
 end
 
 def evernote_to_jekyll(directory)
-	jekyll_imcompatible_files = Dir["#{directory}/*.html"].select do |path_to_HTML_file|
-		file_basename = File.basename(path_to_HTML_file, File.extname(path_to_HTML_file))
-		!/[0-9]{4}-[0-9]{2}-[0-9]{2}-.*/.match? file_basename
-	end
+  jekyll_imcompatible_files = Dir["#{directory}/*.html"].reject do |path_to_HTML_file|
+    file_basename = File.basename(path_to_HTML_file, File.extname(path_to_HTML_file))
+    /[0-9]{4}-[0-9]{2}-[0-9]{2}-.*/.match? file_basename
+  end
 
   print_rename_commands_for_files(jekyll_imcompatible_files)
 end
