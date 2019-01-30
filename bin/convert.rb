@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require "bundler/setup"
-require './src/evernote_to_jekyll'
+require 'bundler/setup'
+require './src/en_html_converter'
 
-puts evernote_to_jekyll(ENV['PATH_TO_HTML'])
+puts ENHTMLConverter.rename_commands(ENV['PATH_TO_HTML'])
