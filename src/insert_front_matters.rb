@@ -2,7 +2,35 @@
 
 require 'nokogiri'
 
-def parse_front_matter(html_path)
+def parse_front_matter_from_markdown(md_path)
+  first_line = File.open(md_path, &:readline)
+  filename = /([0-9]{4}-[0-9]{2}-[0-9]{2}-)?(.*)/.match(first_line)[2]
+  date_matches = /([0-9]{4}-[0-9]{2}-[0-9]{2})-*/.match(first_line)
+
+  if date_matches.nil?
+    <<~FRONT_MATTER
+      ---
+      layout: post
+      title: '#{filename}'
+      date: #{Time.now.strftime("%Y-%m-%d")}
+      categories: draft
+      hidden: true
+      ---
+    FRONT_MATTER
+  else
+    <<~FRONT_MATTER
+      ---
+      layout: post
+      title: '#{filename}'
+      date: #{date_matches[1]}
+      categories: draft
+      hidden: true
+      ---
+    FRONT_MATTER
+  end
+end
+
+def parse_front_matter_from_html(html_path)
   html_page = Nokogiri::HTML(open(html_path))
   keywords_meta_elements = html_page.css('meta[name=keywords]')
 
@@ -36,12 +64,18 @@ def insert_front_matter(front_matter, file)
 end
 
 def insert_front_matters(dir)
-  sanitized_html_paths = Dir["#{dir}/*.html"].reject do |html_path|
-    File.open(html_path, &:readline) == "---\n"
+  sanitized_file_paths = Dir["#{dir}/*"].reject do |file_path|
+    File.open(file_path, &:readline) == "---\n"
   end
 
-  sanitized_html_paths.each do |html_path|
-    front_matter = parse_front_matter(html_path)
-    insert_front_matter(front_matter, html_path)
+  sanitized_file_paths.each do |file_path|
+    case File.extname(file_path)
+    when '.html'
+    front_matter = parse_front_matter_from_html(file_path)
+    insert_front_matter(front_matter, file_path)
+    when '.md'
+    front_matter = parse_front_matter_from_markdown(file_path)
+    insert_front_matter(front_matter, file_path)
+    end
   end
 end
