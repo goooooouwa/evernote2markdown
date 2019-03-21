@@ -10,6 +10,8 @@ class ENHTMLConverter
     @html_path = html_path
   end
 
+  # parse date prefix from date meta attribute in html file
+  # html: parse date meta attribute -> add date prefix to filename
   def name_map
     html_page = Nokogiri::HTML(open(@html_path))
     creation_date = html_page.css('meta[name=created]')[0]

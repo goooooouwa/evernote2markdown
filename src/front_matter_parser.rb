@@ -3,6 +3,7 @@
 require 'nokogiri'
 
 # parse front matter from first line in markdown file in the format '2019-03-20-title'
+# markdown: parse first line -> front matter -> insert to file
 def parse_front_matter_from_markdown(md_path)
   first_line = File.open(md_path, &:readline)
   filename = /([0-9]{4}-[0-9]{2}-[0-9]{2}-)?(.*)/.match(first_line)[2]
@@ -32,6 +33,7 @@ def parse_front_matter_from_markdown(md_path)
 end
 
 # parse front matter from name meta attribute in html file
+# html: parse meta data -> front matter -> insert to file
 def parse_front_matter_from_html(html_path)
   html_page = Nokogiri::HTML(open(html_path))
   keywords_meta_elements = html_page.css('meta[name=keywords]')
@@ -65,6 +67,7 @@ def insert_front_matter(front_matter, file)
   end
 end
 
+# insert front matter to html and markdown files.
 def insert_front_matters(dir)
   sanitized_file_paths = Dir["#{dir}/*"].reject do |file_path|
     File.open(file_path, &:readline) == "---\n"
