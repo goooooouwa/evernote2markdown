@@ -38,55 +38,41 @@ bash ./rename_html.sh
 
 Hopefully, you will now have all your exported note files renamed to jekyll format. :)
 
-### 2. [HTML] [Markdown] [front matter] Insert front matter to HTML or markdown files
+### 2. [HTML] [front matter] Insert front matter to HTML files
 
 #### What it does
 
-- parse front matter from `name` meta attribute in html file, then insert it to html files.
-
-- parse front matter from first line in markdown file in the format `2019-03-20-title`, then insert it to markdown files.
+parse front matter from `name` meta attribute in html file, then insert it to html files.
 
 #### Data Flow
 
-- html: `meta[name] -> front matter -> insert to html`
-
-- markdown: `first line -> front matter -> insert to markdown`
+`meta[name] -> front matter -> insert to html`
 
 #### How to use
 
 ```bash
 export PATH_TO_HTML=/path/to/your/exported/html/note/files
-./bin/2_insert_front_matter.rb
+./bin/2_insert_front_matter_to_html.rb
 ```
 
-### 3. [Markdown] [date prefix] Copy date prefix from HTML to markdown files
+### 3. [Markdown] [front matter] Insert front matter to markdown files
 
-What it does
+#### What it does
 
-Copy date prefix from HTML note files to markdown files. If you already have front matter in your markdown file, you can directly run command 4.
+parse front matter from first line in markdown file in the format `2019-03-20-title`, then insert it to markdown files.
 
 #### Data Flow
 
-`date prefix in html filenames -> markdown filenames`
+ `first line -> front matter -> insert to markdown`
 
 #### How to use
 
-1. Generate the `rename_markdown.sh` to rename your markdown files:
-
 ```bash
-export PATH_TO_HTML=/path/to/your/exported/html/note/files
-export MD_PATH=/path/to/markdown/files
-./bin/3_generate_markdown_rename_script.sh
+export MD_PATH=/path/to/your/markdown/files
+./bin/3_insert_front_matter_to_markdown.rb
 ```
 
-2. Examine the generated `rename_markdown.sh` script in `out` directory,
-3. If everything looks good, go to your `$MD_PATH` and run the script:
-
-```bash
-bash ./rename_markdown.sh
-```
-
-### 4. [Markdown] [date prefix] Add date prefix to filename
+### 4.1. [Markdown] [date prefix] Add date prefix to filename
 
 #### What it does
 
@@ -99,11 +85,38 @@ Parse date prefix from front matter, and add it to filename.
 #### How to use
 
 ```bash
-export TEMP=/path/to/your/markdown/files
-./bin/4_add_date_prefix_to_file.sh
+export MD_PATH=/path/to/your/markdown/files
+./bin/4_1_add_date_prefix_to_file.sh
 ```
 
-## Test
+### 4.2. [Markdown] [date prefix] Copy date prefix from HTML to markdown files
+
+What it does
+
+Copy date prefix from HTML note files to markdown files. If you already have front matter in your markdown file, you can ignore this one.
+
+#### Data Flow
+
+`date prefix in html filenames -> markdown filenames`
+
+#### How to use
+
+1. Generate the `rename_markdown.sh` to rename your markdown files:
+
+```bash
+export PATH_TO_HTML=/path/to/your/exported/html/note/files
+export MD_PATH=/path/to/markdown/files
+./bin/4_2_generate_markdown_rename_script.sh
+```
+
+2. Examine the generated `rename_markdown.sh` script in `out` directory,
+3. If everything looks good, go to your `$MD_PATH` and run the script:
+
+```bash
+bash ./rename_markdown.sh
+```
+
+### Test
 
 ```bash
 rspec
