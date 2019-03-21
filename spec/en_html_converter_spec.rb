@@ -7,12 +7,12 @@ RSpec.describe ENHTMLConverter do
     @html_dir = './spec/fixtures'
   end
 
-  it '.rename_commands' do
-    rename_commands = <<~HEREDOC
+  it '.generate_rename_commands' do
+    generate_rename_commands = <<~HEREDOC
       mv exported-note.html 2017-11-16-exported-note.html
       mv exported-note.resources 2017-11-16-exported-note
     HEREDOC
-    expect(ENHTMLConverter.rename_commands(@html_dir)).to eq(rename_commands)
+    expect(ENHTMLConverter.generate_rename_commands(@html_dir)).to eq(generate_rename_commands)
   end
 
   it '#generate_rename_command' do

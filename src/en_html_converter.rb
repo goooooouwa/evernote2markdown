@@ -37,7 +37,7 @@ class ENHTMLConverter
     e.to_s
   end
 
-  def self.rename_commands(dir)
+  def self.generate_rename_commands(dir)
     sanitized_html_paths = Dir["#{dir}/*.html"].reject do |html_path|
       filename = File.basename(html_path)
       filename == 'index.html'
