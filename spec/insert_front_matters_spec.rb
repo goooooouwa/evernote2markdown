@@ -15,7 +15,7 @@ RSpec.describe 'insert_front_matters' do
       title: 'test sepcial characters in evernote note export filename !@#$%^&*()_+{}[]\\|;',./:"<>? `~'
       ---
     HEREDOC
-    expect(parse_front_matter(html_path)).to eq(front_matter)
+    expect(parse_front_matter_from_html(html_path)).to eq(front_matter)
   end
 
   it '#insert_front_matters' do
