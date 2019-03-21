@@ -11,5 +11,5 @@ for filename in $PATH_TO_MD/[^0-9]*; do
   date_prefix=$(echo $date_line | cut -c 7-)
   
   echo "cp $filename $PATH_TO_MD/$date_prefix-$title.md"
-  cp "$filename" "$PATH_TO_MD/$date_prefix$title.md"
+  cp "$filename" "$PATH_TO_MD/$date_prefix-$title.md"
 done
