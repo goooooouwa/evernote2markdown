@@ -69,7 +69,7 @@ parse front matter from first line in markdown file in the format `2019-03-20-ti
 
 ```bash
 export PATH_TO_MD=/path/to/your/markdown/files
-./bin/3_insert_front_matter_to_markdown.rb
+./bin/3_insert_front_matter_to_md.rb
 ```
 
 ### 4.1. [Markdown] [date prefix] Add date prefix to filename
@@ -106,7 +106,7 @@ Copy date prefix from HTML note files to markdown files. If you already have fro
 ```bash
 export PATH_TO_HTML=/path/to/your/exported/html/note/files
 export PATH_TO_MD=/path/to/markdown/files
-./bin/4_2_generate_markdown_rename_script.sh
+./bin/4_2_generate_md_rename_script.sh
 ```
 
 2. Examine the generated `rename_markdown.sh` script in `out` directory,
