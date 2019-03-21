@@ -15,14 +15,14 @@ RSpec.describe ENHTMLConverter do
     expect(ENHTMLConverter.rename_commands(@html_dir)).to eq(rename_commands)
   end
 
-  it '#rename_command' do
+  it '#generate_rename_command' do
     html_path = "#{@html_dir}/exported-note.html"
 
-    rename_command = <<~HEREDOC
+    generated_rename_command = <<~HEREDOC
       mv exported-note.html 2017-11-16-exported-note.html
       mv exported-note.resources 2017-11-16-exported-note
     HEREDOC
-    expect(ENHTMLConverter.new(html_path).rename_command).to eq(rename_command)
+    expect(ENHTMLConverter.new(html_path).generate_rename_command).to eq(generated_rename_command)
   end
 
   it '#name_map' do

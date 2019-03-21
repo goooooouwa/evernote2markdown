@@ -26,7 +26,7 @@ class ENHTMLConverter
     }
   end
 
-  def rename_command
+  def generate_rename_command
     name_map = self.name_map
     # not every html file has a corresponding resources folder
     <<~HEREDOC
@@ -48,7 +48,7 @@ class ENHTMLConverter
 
     commands = ''
     sanitized_html_paths.each do |html_path|
-      commands += new(html_path).rename_command
+      commands += new(html_path).generate_rename_command
     end
     commands
   rescue ArgumentError => e
