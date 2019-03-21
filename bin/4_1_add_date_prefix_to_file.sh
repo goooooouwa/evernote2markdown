@@ -3,7 +3,7 @@
 # parse date prefix from front matter and add it to filename
 # date prefix in front matter -> date_prefix-filename
 
-for filename in $MD_PATH/*; do
+for filename in $PATH_TO_MD/*; do
   title_line=$(sed '3q;d' $filename)
   title=$(echo $title_line | cut -c 9- | rev | cut -c 2- | rev)   # cut front and back
 
