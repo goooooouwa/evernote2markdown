@@ -16,7 +16,7 @@ def parse_front_matter_from_markdown(md_path)
       title: '#{filename}'
       date: #{Time.now.strftime("%Y-%m-%d")}
       categories: draft
-      hidden: true
+      published: false
       ---
     FRONT_MATTER
   else
@@ -26,7 +26,7 @@ def parse_front_matter_from_markdown(md_path)
       title: '#{filename}'
       date: #{date_matches[1]}
       categories: draft
-      hidden: true
+      published: false
       ---
     FRONT_MATTER
   end
