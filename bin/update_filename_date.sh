@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# add date prefix to filename
 for filename in $TEMP/*; do
   date_line=$(sed '4q;d' $filename)
   date_prefix=$(echo $date_line | cut -c 7-)
