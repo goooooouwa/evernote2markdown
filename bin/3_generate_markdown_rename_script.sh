@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# generate shell script to copy date prefixes from html note files to corresponding markdown files
+# copy date prefixes from html note files to corresponding markdown files
 
 # PATH_TO_HTML=/path/to/evernote/html/files
 # MD_PATH=/path/to/markdown/files
