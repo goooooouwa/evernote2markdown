@@ -67,6 +67,10 @@ def insert_front_matter(front_matter, file)
   end
 end
 
+def delete_original_title(file_path)
+  `sed '8d' #{file_path} > tmpfile; mv tmpfile #{file_path}`
+end
+
 # insert front matter to html and markdown files.
 def insert_front_matters(dir)
   sanitized_file_paths = Dir["#{dir}/*"].reject do |file_path|
@@ -81,6 +85,7 @@ def insert_front_matters(dir)
     when '.md'
     front_matter = parse_front_matter_from_markdown(file_path)
     insert_front_matter(front_matter, file_path)
+    delete_original_title(file_path)
     end
   end
 end
