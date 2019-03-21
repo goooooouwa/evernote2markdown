@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './src/insert_front_matters.rb'
+require './src/front_matter_parser.rb'
 
 RSpec.describe 'insert_front_matters' do
   before(:all) do

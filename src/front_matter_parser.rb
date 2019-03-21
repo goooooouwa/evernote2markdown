@@ -2,6 +2,7 @@
 
 require 'nokogiri'
 
+# parse front matter from first line in markdown file in the format '2019-03-20-title'
 def parse_front_matter_from_markdown(md_path)
   first_line = File.open(md_path, &:readline)
   filename = /([0-9]{4}-[0-9]{2}-[0-9]{2}-)?(.*)/.match(first_line)[2]
@@ -30,6 +31,7 @@ def parse_front_matter_from_markdown(md_path)
   end
 end
 
+# parse front matter from name meta attribute in html file
 def parse_front_matter_from_html(html_path)
   html_page = Nokogiri::HTML(open(html_path))
   keywords_meta_elements = html_page.css('meta[name=keywords]')

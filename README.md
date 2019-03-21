@@ -13,7 +13,7 @@ bundle install
 
 ```bash
 export PATH_TO_HTML=/path/to/your/exported/html/note/files
-./bin/add_date_to_html.sh
+./bin/generate_html_rename_script.sh
 ```
 
 2. Examine the generated `rename_html.sh` script in `out` directory,
@@ -29,7 +29,7 @@ Hopefully, you will now have all your exported note files renamed to jekyll form
 
 ```bash
 export PATH_TO_HTML=/path/to/your/exported/html/note/files
-./bin/insert.rb
+./bin/insert_front_matter.rb
 ```
 
 ## Add date prefix to markdown files
@@ -44,7 +44,7 @@ HTML note files has date prefix.
 ```bash
 export PATH_TO_HTML=/path/to/your/exported/html/note/files
 export MD_PATH=/path/to/markdown/files
-./bin/add_date_to_md.sh
+./bin/generate_markdown_rename_script.sh.sh
 ```
 
 2. Examine the generated `rename_markdown.sh` script in `out` directory,
