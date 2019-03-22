@@ -12,9 +12,9 @@ def parse_front_matter_from_markdown(md_path)
   if date_matches.nil?
     <<~FRONT_MATTER
       ---
+      title: #{filename}
       layout: post
-      title: '#{filename}'
-      date: #{Time.now.strftime("%Y-%m-%d")}
+      date: '#{Time.now.strftime("%Y-%m-%d")}'
       categories: draft
       published: false
       ---
@@ -22,9 +22,9 @@ def parse_front_matter_from_markdown(md_path)
   else
     <<~FRONT_MATTER
       ---
+      title: #{filename}
       layout: post
-      title: '#{filename}'
-      date: #{date_matches[1]}
+      date: '#{date_matches[1]}'
       categories: draft
       published: false
       ---
