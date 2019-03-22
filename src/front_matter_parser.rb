@@ -68,7 +68,7 @@ def insert_front_matter(front_matter, file)
 end
 
 def delete_original_title(file_path)
-  `sed '8d' #{file_path} > tmpfile; mv tmpfile #{file_path}`
+  `sed '8d' "#{file_path}" > tmpfile; mv tmpfile "#{file_path}"`
 end
 
 # insert front matter to html and markdown files.
