@@ -7,9 +7,9 @@ GEM
     diff-lcs (1.3)
     docile (1.3.1)
     json (2.1.0)
-    mini_portile2 (2.3.0)
-    nokogiri (1.8.1)
-      mini_portile2 (~> 2.3.0)
+    mini_portile2 (2.4.0)
+    nokogiri (1.10.2)
+      mini_portile2 (~> 2.4.0)
     rake (12.3.2)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
@@ -37,7 +37,7 @@ PLATFORMS
 
 DEPENDENCIES
   debase
-  nokogiri
+  nokogiri (>= 1.8.5)
   rspec
   ruby-debug-ide
   simplecov

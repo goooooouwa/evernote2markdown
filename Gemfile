@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'nokogiri'
+gem "nokogiri", ">= 1.8.5"
 
 group :test do
   gem 'rspec'
