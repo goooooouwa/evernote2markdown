@@ -8,7 +8,7 @@
 
 本质上，我希望能将Evernote笔记转换成Markdown格式（最好Markdown也能转成笔记），这样我就可以将笔记发布到如Jekyll博客之类的写作平台。
 
-EEvernote原生不支持Markdown，市面上有一些工具（如，马克飞象）和替代品（如，有道云笔记），但是这些工具有么收费、要么一堆广告，不符合开源精神。于是，我又在Github上寻找开源的Evernote转Markdown工具，比如[ever2simple](https://github.com/dougdiego/ever2simple)，[geeknotes](https://github.com/jeffkowalski/geeknote), [sublime-evernote](https://github.com/bordaigorl/sublime-evernote), vscode_evernote, [chienote](https://github.com/chiepomme/chienote), [evernote-dump](https://github.com/exomut/evernote-dump)。试用下来，这些工具要么支持的Markdown格式较少（如ever2simple），要么因为安全考虑被Evernote官方禁用（如geeknotes, sublime_evernote, vscode_evernote），要么已经多年不维护了（如chienote）。总之，当前市面上并没有一款免费开源的支持Evernote与Markdown互相转换的产品。
+EEvernote原生不支持Markdown，市面上有一些工具（如，马克飞象）和替代品（如，有道云笔记），但是这些工具有么收费、要么一堆广告，不符合开源精神。于是，我又在Github上寻找开源的Evernote转Markdown工具，比如[ever2simple](https://github.com/dougdiego/ever2simple)，[geeknotes](https://github.com/jeffkowalski/geeknote), [sublime-evernote](https://github.com/bordaigorl/sublime-evernote), [vscode_evernote](https://marketplace.visualstudio.com/items?itemName=rhapsodyn.vscode-evernote), [chienote](https://github.com/chiepomme/chienote), [evernote-dump](https://github.com/exomut/evernote-dump)。试用下来，这些工具要么支持的Markdown格式较少（如ever2simple），要么因为安全考虑被Evernote官方禁用（如geeknotes, sublime_evernote, vscode_evernote），要么已经多年不维护了（如chienote）。总之，当前市面上并没有一款免费开源的支持Evernote与Markdown互相转换的产品。
 
 于是我开始自己写... 就有了这个项目。
 
