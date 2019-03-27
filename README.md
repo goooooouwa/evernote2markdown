@@ -1,4 +1,6 @@
-# 2-way transform between Evernote and Markdown format
+# Evernote <=> Markdown
+
+2-way transform between Evernote and Markdown format
 
 作为一个经常东想西想的人，我经常在Evernote中记录一些想法，随着时间推移有些想法逐渐成熟，当我想将这些想法分享到我的博客（Jekyll），却苦于找不到趁手的工具。
 
