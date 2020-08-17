@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'date'
 require 'nokogiri'
 
 # parse front matter from first line in markdown file in the format '2019-03-20-title'
@@ -29,6 +30,16 @@ def parse_front_matter_from_markdown(md_path)
       published: false
       ---
     FRONT_MATTER
+  end
+end
+
+def parse_created_date_from_html(html_path)
+  html_page = Nokogiri::HTML(open(html_path))
+  keywords_meta_elements = html_page.css('meta[name=created]')
+  if keywords_meta_elements.length > 0
+    created_date = keywords_meta_elements.first.attributes['content']
+        .value.split(', ').first
+    puts "|#{html_path}|#{DateTime.parse(created_date).strftime("%Y-%m-%d")}|"
   end
 end
 
@@ -80,12 +91,18 @@ def insert_front_matters(dir)
   sanitized_file_paths.each do |file_path|
     case File.extname(file_path)
     when '.html'
-    front_matter = parse_front_matter_from_html(file_path)
-    insert_front_matter(front_matter, file_path)
+      front_matter = parse_front_matter_from_html(file_path)
+      insert_front_matter(front_matter, file_path)
     when '.md'
-    front_matter = parse_front_matter_from_markdown(file_path)
-    insert_front_matter(front_matter, file_path)
-    delete_original_title(file_path)
+      front_matter = parse_front_matter_from_markdown(file_path)
+      insert_front_matter(front_matter, file_path)
+      delete_original_title(file_path)
     end
+  end
+end
+
+def print_created_date_from_html_in_dir(dir)
+  Dir["#{dir}/*.html"].each do |file_path|
+    parse_created_date_from_html(file_path)
   end
 end
