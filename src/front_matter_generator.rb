@@ -1,28 +1,33 @@
 require 'ruby-pinyin'
 
 def run
-  Dir.glob('./_notes/*/*.md') do |filename|
-    puts filename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
-    unless filename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
-      #   puts "check #{filename}? [Y/n]"
-      #   check_file = gets.chomp
-      check_file = 'y'
-      unless check_file.downcase == 'n'
-        # insert_title(filename)
-        # insert_date(filename)
-        # insert_category(filename)
-        # convert_filename(filename)
-        # add_current_date_prefix_to_filename(filename)
-        add_created_date_prefix_to_filename(filename)
+  Dir.glob('../input/_notes/*/*.md') do |filename|
+    file = File.open(filename)
+    puts file.read
+    puts "check #{filename}? [Y/n]"
+    check_file = 'y'
+    # check_file = gets.chomp
+    unless check_file.downcase == 'n'
+      insert_title(filename)
+      insert_created_date(filename)
+      # insert_category(filename)
+      unless filename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
+        add_current_date_prefix_to_filename(filename)
+        # add_created_date_prefix_to_filename(filename)
       end
+      convert_filename_to_pinyin(filename)
     end
   end
 end
 
 def insert_title(filename)
   basename = File.basename(filename, ".md")
+  if basename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
+    basename = basename.slice(11..-1)
+  end
   puts "insert front matter 'title: #{basename}'? [Y/n]"
-  insert_title = gets.chomp
+  insert_title = 'y'
+  # insert_title = gets.chomp
   unless insert_title.downcase == 'n'
     puts "gsed -i '1 a title: #{basename}' \"#{filename}\""
     `gsed -i '1 a title: #{basename}' "#{filename}"`
@@ -30,10 +35,16 @@ def insert_title(filename)
   end
 end
 
-def insert_date(filename)
-  created_at = File.ctime(filename).strftime("%Y-%m-%d")
+def insert_created_date(filename)
+  basename = File.basename(filename, ".md")
+  if basename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
+    created_at = basename.slice(0..9)
+  else
+    created_at = File.ctime(filename).strftime("%Y-%m-%d")
+  end
   puts "insert front matter 'date: #{created_at}'? [Y/n]"
-  insert_date = gets.chomp
+  insert_date = 'y'
+  # insert_date = gets.chomp
   unless insert_date.downcase == 'n'
     puts "gsed -i '1 a date: #{created_at}' \"#{filename}\""
     `gsed -i '1 a date: #{created_at}' "#{filename}"`
@@ -52,12 +63,19 @@ def insert_category(filename)
   end
 end
 
-def convert_filename(filename)
+def convert_filename_to_pinyin(filename)
   basename = File.basename(filename, ".md")
   dirname = File.dirname(filename)
-  converted_filename = "#{PinYin.permlink(basename).downcase}.md"
-  puts "convert filename to '#{converted_filename}'? [Y/n]"
-  convert_filename = gets.chomp
+  if basename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
+    date = basename.slice(0..9)
+    chinese_name = basename.slice(11..-1)
+    converted_filename = "#{date}-#{PinYin.permlink(chinese_name).downcase}.md"
+  else
+    converted_filename = "#{PinYin.permlink(basename).downcase}.md"
+  end
+  puts "convert filename from '#{filename}' to '#{converted_filename}'? [Y/n]"
+  convert_filename = 'y'
+  # convert_filename = gets.chomp
   unless convert_filename.downcase == 'n'
     puts "mv \"#{filename}\" \"#{dirname}/#{converted_filename}\""
     `mv "#{filename}" "#{dirname}/#{converted_filename}"`
@@ -84,9 +102,13 @@ def add_created_date_prefix_to_filename(filename)
   dirname = File.dirname(filename)
   created_at = grep_search(basename)
   filename_with_date_prefix = "#{created_at}-#{basename}.md"
-  puts "mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\""
-  `mv "#{filename}" "#{dirname}/#{filename_with_date_prefix}"`
-  puts "prefix added"
+  puts "add date prefix '#{current_date}-'? [Y/n]"
+  add_date_prefix = gets.chomp
+  unless add_date_prefix.downcase == 'n'
+    puts "mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\""
+    `mv "#{filename}" "#{dirname}/#{filename_with_date_prefix}"`
+    puts "prefix added"
+  end
 end
 
 # date.md format:
