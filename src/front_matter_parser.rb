@@ -15,7 +15,7 @@ def parse_front_matter_from_markdown(md_path)
       ---
       title: #{filename}
       layout: post
-      date: '#{Time.now.strftime("%Y-%m-%d")}'
+      date: '#{Time.now.strftime('%Y-%m-%d')}'
       categories: draft
       published: false
       ---
@@ -38,8 +38,8 @@ def parse_created_date_from_html(html_path)
   keywords_meta_elements = html_page.css('meta[name=created]')
   if keywords_meta_elements.length > 0
     created_date = keywords_meta_elements.first.attributes['content']
-        .value.split(', ').first
-    puts "|#{html_path}|#{DateTime.parse(created_date).strftime("%Y-%m-%d")}|"
+                                         .value.split(', ').first
+    puts "|#{html_path}|#{DateTime.parse(created_date).strftime('%Y-%m-%d')}|"
   end
 end
 
