@@ -7,8 +7,14 @@ require 'ruby-pinyin'
 # 1. md files directory, e.g. path/to/writings/_notes
 def run
   Dir.glob("#{ARGV[0]}/*/*.md") do |filename|
+    basename = File.basename(filename)
+    if basename.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-z-]+[.]md$/)
+      puts "skipping #{basename}..."
+      next
+    end
+
+    puts "check #{basename}? [Y/n]"
     puts `head -7 "#{filename}"`
-    puts "check #{filename}? [Y/n]"
     # check_file = 'y'
     check_file = STDIN.gets.chomp
     unless check_file.downcase == 'n'
