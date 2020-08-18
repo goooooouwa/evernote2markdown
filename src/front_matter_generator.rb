@@ -5,8 +5,8 @@ require 'ruby-pinyin'
 
 # command line params:
 # 1. md files directory, e.g. path/to/writings/_notes
-def run
-  Dir.glob("#{ARGV[0]}/*/*.md") do |filename|
+def run(dir)
+  Dir.glob("#{dir}/*/*.md") do |filename|
     basename = File.basename(filename)
     if basename.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-z-]+[.]md$/)
       puts "skipping #{basename}..."
@@ -20,7 +20,7 @@ def run
     unless check_file.downcase == 'n'
       insert_title(filename)
       insert_created_date(filename)
-      # insert_category(filename)
+      # insert_category_from_dir(filename)
       unless filename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
         add_current_date_prefix_to_filename(filename)
         # add_created_date_prefix_to_filename(filename)
@@ -60,15 +60,45 @@ def insert_created_date(filename)
   puts 'inserted'
 end
 
-def insert_category(filename)
+def insert_category_from_dir(filename)
   category = File.dirname(filename).split('/').last
+  insert_category(filename, category)
+end
+
+def insert_category(filename, category)
   puts "insert front matter 'category: #{category}'? [Y/n]"
   insert_category = STDIN.gets.chomp
   return if insert_category.downcase == 'n'
 
   puts "gsed -i '1 a category: #{category}' \"#{filename}\""
   `gsed -i '1 a category: #{category}' "#{filename}"`
-  puts 'inserted'
+  puts 'category inserted'
+end
+
+def batch_insert_category(dir)
+  Dir.glob("#{dir}/*.md") do |filename|
+    puts "categorizing #{filename}..."
+    puts `head -7 "#{filename}"`
+    puts 'Enter category name:'
+    category = STDIN.gets.chomp
+    insert_category(filename, category)
+    move_to_category_folder(filename, category)
+  end
+end
+
+def move_to_category_folder(filename, category)
+  basename = File.basename(filename, '.md')
+  dirname = File.dirname(filename)
+  underscored_category = category.split(' ').join('_')
+  puts "move #{basename}.md to category folder: #{underscored_category} ? [Y/n]"
+  move_file = STDIN.gets.chomp
+  return if move_file.downcase == 'n'
+
+  puts "mv \"#{filename}\" \"#{dirname}/#{underscored_category}/#{basename}.md\""
+  puts "mkdir -p #{dirname}/#{underscored_category}/"
+  `mkdir -p "#{dirname}/#{underscored_category}/"`
+  `mv "#{filename}" "#{dirname}/#{underscored_category}/#{basename}.md"`
+  puts 'categoriezd'
 end
 
 def convert_filename_to_pinyin(filename)
@@ -134,4 +164,5 @@ def grep_search(term)
   created_at
 end
 
-run
+run(ARGV[0])
+# batch_insert_category(ARGV[0])
