@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './operations/insert_front_matter'
-require './operations/transform_filename'
+require_relative './operations/insert_front_matter.rb'
+require_relative './operations/transform_filename.rb'
 
 def batch_insert_tag(dir)
   batch_process_dir(dir) do |filename|

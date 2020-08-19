@@ -2,20 +2,17 @@
 # frozen_string_literal: true
 
 require 'ruby-pinyin'
-require './common'
+require_relative './common'
 
 def move_to_category_folder(filename, category)
   basename = File.basename(filename, '.md')
   dirname = File.dirname(filename)
   underscored_category = category.split(' ').join('_')
-  puts "move #{basename}.md to category folder: #{underscored_category} ? [Y/n]"
+  ask_question filename, "Move #{basename}.md to folder: #{underscored_category} ? [Y/n]"
   return if STDIN.gets.chomp.downcase == 'n'
 
-  puts "mkdir -p #{dirname}/#{underscored_category}/"
-  puts "mv \"#{filename}\" \"#{dirname}/#{underscored_category}/#{basename}.md\""
-  `mkdir -p "#{dirname}/#{underscored_category}/"`
-  `mv "#{filename}" "#{dirname}/#{underscored_category}/#{basename}.md"`
-  puts 'file moved to category folder'
+  execute_command("mkdir -p #{dirname}/#{underscored_category}/")
+  execute_command("mv \"#{filename}\" \"#{dirname}/#{underscored_category}/#{basename}.md\"")
 end
 
 def convert_to_pinyin(filename)
@@ -30,14 +27,13 @@ def convert_to_pinyin(filename)
 end
 
 def convert_filename(filename)
+  basename = File.basename(filename)
   dirname = File.dirname(filename)
   converted_filename = convert_to_pinyin(filename)
-  puts "convert filename from '#{filename}' to '#{converted_filename}'? [Y/n]"
+  ask_question filename, "Rename '#{basename}'.md to '#{converted_filename}'? [Y/n]"
   return if STDIN.gets.chomp.downcase == 'n'
 
-  puts "mv \"#{filename}\" \"#{dirname}/#{converted_filename}\""
-  `mv "#{filename}" "#{dirname}/#{converted_filename}"`
-  puts 'filename converted'
+  execute_command("mv \"#{filename}\" \"#{dirname}/#{converted_filename}\"")
 end
 
 def add_current_date_prefix(filename)
@@ -45,12 +41,10 @@ def add_current_date_prefix(filename)
   dirname = File.dirname(filename)
   current_date = File.ctime(filename).strftime('%Y-%m-%d')
   filename_with_date_prefix = "#{current_date}-#{basename}.md"
-  puts "add date prefix '#{current_date}-'? [Y/n]"
+  ask_question filename, "Prefix #{basename}.md with '#{current_date}-'? [Y/n]"
   return if STDIN.gets.chomp.downcase == 'n'
 
-  puts "mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\""
-  `mv "#{filename}" "#{dirname}/#{filename_with_date_prefix}"`
-  puts 'prefix added'
+  execute_command("mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\"")
 end
 
 # date.md format:
@@ -74,10 +68,8 @@ def add_created_date_prefix_by_search(filename, date_file)
   dirname = File.dirname(filename)
   created_at = iteratively_search_created_date(date_file, basename)
   filename_with_date_prefix = "#{created_at}-#{basename}.md"
-  puts "add date prefix '#{current_date}-'? [Y/n]"
+  ask_question filename, "Prefix #{basename}.md with '#{current_date}-'? [Y/n]"
   return if STDIN.gets.chomp.downcase == 'n'
 
-  puts "mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\""
-  `mv "#{filename}" "#{dirname}/#{filename_with_date_prefix}"`
-  puts 'prefix added'
+  execute_command("mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\"")
 end
