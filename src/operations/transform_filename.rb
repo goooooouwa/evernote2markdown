@@ -26,7 +26,7 @@ def convert_to_pinyin(filename)
   end
 end
 
-def convert_filename(filename)
+def permlink_filename(filename)
   basename = File.basename(filename)
   dirname = File.dirname(filename)
   converted_filename = convert_to_pinyin(filename)

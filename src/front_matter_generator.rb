@@ -36,9 +36,9 @@ def batch_insert_and_move_to_category(dir)
   end
 end
 
-def batch_convert_filename(dir)
+def batch_permlink_filename(dir)
   batch_process_dir(dir) do |filename|
-    convert_filename(filename)
+    permlink_filename(filename)
   end
 end
 
@@ -57,15 +57,15 @@ end
 # command line params:
 # 1. md files directory, e.g. path/to/writings/_notes
 def run(dir)
+  # ## insert front matter
   batch_insert_tag(dir)
-
   batch_insert_title(dir)
-  batch_convert_filename(dir)
-
-  # batch_add_current_date_prefix(dir)
-  # batch_add_created_date_prefix_by_search(dir)
   batch_insert_date(dir)
 
+  # ## transform filename
+  # batch_add_current_date_prefix(dir)
+  # batch_add_created_date_prefix_by_search(dir)
+  batch_permlink_filename(dir)
   # batch_insert_category_from_folder(dir)
   batch_insert_and_move_to_category(dir)
 end
