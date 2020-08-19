@@ -30,7 +30,7 @@ end
 
 def b3_batch_insert_and_move_to_category(dir)
   batch_process_dir(dir) do |filename|
-    category = get_category_from_user(filename)
+    category = get_category_from_folder(filename)
     insert_category(filename, category)
     move_to_category_folder(filename, category)
   end

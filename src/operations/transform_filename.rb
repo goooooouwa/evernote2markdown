@@ -9,7 +9,7 @@ def move_to_category_folder(filename, category)
   dirname = File.dirname(filename)
   underscored_category = category.split(' ').join('_')
   ask_question filename, "Move #{basename}.md to folder: #{underscored_category} ? [Y/n]"
-  return if STDIN.gets.chomp.downcase == 'n'
+  # return if STDIN.gets.chomp.downcase == 'n'
 
   execute_command("mkdir -p #{dirname}/#{underscored_category}/")
   execute_command("mv \"#{filename}\" \"#{dirname}/#{underscored_category}/#{basename}.md\"")
@@ -31,7 +31,7 @@ def permlink_filename(filename)
   dirname = File.dirname(filename)
   converted_filename = convert_to_pinyin(filename)
   ask_question filename, "Rename '#{basename}'.md to '#{converted_filename}'? [Y/n]"
-  return if STDIN.gets.chomp.downcase == 'n'
+  # return if STDIN.gets.chomp.downcase == 'n'
 
   execute_command("mv \"#{filename}\" \"#{dirname}/#{converted_filename}\"")
 end
@@ -42,7 +42,7 @@ def add_current_date_prefix(filename)
   current_date = File.ctime(filename).strftime('%Y-%m-%d')
   filename_with_date_prefix = "#{current_date}-#{basename}.md"
   ask_question filename, "Prefix #{basename}.md with '#{current_date}-'? [Y/n]"
-  return if STDIN.gets.chomp.downcase == 'n'
+  # return if STDIN.gets.chomp.downcase == 'n'
 
   execute_command("mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\"")
 end
@@ -69,7 +69,7 @@ def add_created_date_prefix_by_search(filename, date_file)
   created_at = iteratively_search_created_date(date_file, basename)
   filename_with_date_prefix = "#{created_at}-#{basename}.md"
   ask_question filename, "Prefix #{basename}.md with '#{current_date}-'? [Y/n]"
-  return if STDIN.gets.chomp.downcase == 'n'
+  # return if STDIN.gets.chomp.downcase == 'n'
 
   execute_command("mv \"#{filename}\" \"#{dirname}/#{filename_with_date_prefix}\"")
 end
