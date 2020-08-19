@@ -6,35 +6,33 @@ require 'ruby-pinyin'
 # command line params:
 # 1. md files directory, e.g. path/to/writings/_notes
 def run(dir)
-  Dir.glob("#{dir}/*/*.md") do |filename|
+  Dir.glob("#{dir}/*.md") do |filename|
     basename = File.basename(filename)
     if basename.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-z-]+[.]md$/)
-      puts "skipping #{basename}..."
+      puts "skip processed file: #{basename}..."
       next
     end
 
     puts "check #{basename}? [Y/n]"
     puts `head -7 "#{filename}"`
-    # check_file = 'y'
     check_file = STDIN.gets.chomp
     unless check_file.downcase == 'n'
-      insert_title(filename)
-      insert_created_date(filename)
-      # insert_category_from_dir(filename)
+      insert_front_matter_tag(filename)
+      insert_title_front_matter(filename)
+      insert_date_front_matter(filename)
+      insert_category_by_user(convert_filename_to_pinyin(filename))
       unless filename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
         add_current_date_prefix_to_filename(filename)
         # add_created_date_prefix_to_filename(filename)
       end
-      convert_filename_to_pinyin(filename)
     end
   end
 end
 
-def insert_title(filename)
+def insert_title_front_matter(filename)
   basename = File.basename(filename, '.md')
   basename = basename.slice(11..-1) if basename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
   puts "insert front matter 'title: #{basename}'? [Y/n]"
-  # insert_title = 'y'
   insert_title = STDIN.gets.chomp
   return if insert_title.downcase == 'n'
 
@@ -43,15 +41,26 @@ def insert_title(filename)
   puts 'inserted'
 end
 
-def insert_created_date(filename)
+def insert_front_matter_tag(filename)
+  puts "insert front matter 'tag: ---'? [Y/n]"
+  insert_title = STDIN.gets.chomp
+  return if insert_title.downcase == 'n'
+
+  puts "gsed -i '1 i ---' \"#{filename}\""
+  `gsed -i '1 i ---' "#{filename}"`
+  `gsed -i '1 i ---' "#{filename}"`
+  puts 'front matter tag inserted'
+end
+
+def insert_date_front_matter(filename)
   basename = File.basename(filename, '.md')
   created_at = if basename.match(/.*([0-9]{4}-[0-9]{2}-[0-9]{2})-.*/)
                  basename.slice(0..9)
                else
-                 File.ctime(filename).strftime('%Y-%m-%d')
+                 puts 'Enter a date:'
+                 STDIN.gets.chomp
                end
   puts "insert front matter 'date: #{created_at}'? [Y/n]"
-  # insert_date = 'y'
   insert_date = STDIN.gets.chomp
   return if insert_date.downcase == 'n'
 
@@ -75,14 +84,16 @@ def insert_category(filename, category)
   puts 'category inserted'
 end
 
+def insert_category_by_user(filename)
+  puts 'Enter category name:'
+  category = STDIN.gets.chomp
+  insert_category(filename, category)
+  move_to_category_folder(filename, category)
+end
+
 def batch_insert_category(dir)
   Dir.glob("#{dir}/*.md") do |filename|
-    puts "categorizing #{filename}..."
-    puts `head -7 "#{filename}"`
-    puts 'Enter category name:'
-    category = STDIN.gets.chomp
-    insert_category(filename, category)
-    move_to_category_folder(filename, category)
+    insert_category_by_user(filename)
   end
 end
 
@@ -94,8 +105,8 @@ def move_to_category_folder(filename, category)
   move_file = STDIN.gets.chomp
   return if move_file.downcase == 'n'
 
-  puts "mv \"#{filename}\" \"#{dirname}/#{underscored_category}/#{basename}.md\""
   puts "mkdir -p #{dirname}/#{underscored_category}/"
+  puts "mv \"#{filename}\" \"#{dirname}/#{underscored_category}/#{basename}.md\""
   `mkdir -p "#{dirname}/#{underscored_category}/"`
   `mv "#{filename}" "#{dirname}/#{underscored_category}/#{basename}.md"`
   puts 'categoriezd'
@@ -119,6 +130,8 @@ def convert_filename_to_pinyin(filename)
   puts "mv \"#{filename}\" \"#{dirname}/#{converted_filename}\""
   `mv "#{filename}" "#{dirname}/#{converted_filename}"`
   puts 'converted'
+
+  "#{dirname}/#{converted_filename}"
 end
 
 def add_current_date_prefix_to_filename(filename)
