@@ -9,7 +9,7 @@ def move_to_category_folder(filename, category)
   dirname = File.dirname(filename)
   underscored_category = category.split(' ').join('_')
   ask_question filename, "Move #{basename}.md to folder: #{underscored_category} ? [Y/n]"
-  # return if STDIN.gets.chomp.downcase == 'n'
+  return if STDIN.gets.chomp.downcase == 'n'
 
   execute_command("mkdir -p #{dirname}/#{underscored_category}/")
   execute_command("mv \"#{filename}\" \"#{dirname}/#{underscored_category}/#{basename}.md\"")
