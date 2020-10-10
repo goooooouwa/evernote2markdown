@@ -3,21 +3,31 @@
 
 require 'ruby-pinyin'
 
-def run(dir)
+def rename_micro_posts(dir)
   Dir.glob("#{dir}/*/*/*/*.txt") do |filename|
     basename = File.basename(filename, '.txt')
     dirname = File.dirname(filename)
-    basename_with_date = dirname.gsub('/', '-').sub(/.*_micro_posts-/, '')
-    date, basename_without_date = basename_with_date.split('_')
-    pinyin_basename = PinYin.permlink(basename_without_date).downcase
-    md_basename = "#{date}-#{pinyin_basename}"
-    # puts "basename_with_date: #{basename_with_date}"
-    # puts "basename_without_date: #{basename_without_date}"
-    # puts "date: #{date}"
-    # puts "pinyin_basename: #{pinyin_basename}"
-    # puts "md_basename: #{md_basename}"
+    md_basename = generate_md_basename(dirname)
     puts `mv "#{dirname}/#{basename}.txt" "#{dirname}/#{md_basename[0..124]}.md"`
   end
 end
 
-run(ARGV[0])
+def generate_md_basename(dirname)
+  basename_with_date = dirname.gsub('/', '-').sub(/.*_micro_posts-/, '')
+  date, basename_without_date = basename_with_date.split('_')
+  pinyin_basename = PinYin.permlink(basename_without_date).downcase
+  # puts "basename_with_date: #{basename_with_date}"
+  # puts "basename_without_date: #{basename_without_date}"
+  # puts "date: #{date}"
+  # puts "pinyin_basename: #{pinyin_basename}"
+  "#{date}-#{pinyin_basename}"
+end
+
+def rename_post_folders(dir)
+  Dir.glob("#{dir}/*/*/*") do |dirname|
+    md_basename = generate_md_basename(dirname)
+    puts `mv "#{dirname}" "$(dirname "#{dirname}")/#{md_basename[0..19]}"`
+  end
+end
+
+rename_post_folders(ARGV[0])
