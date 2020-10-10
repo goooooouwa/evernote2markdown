@@ -7,7 +7,7 @@ def run(dir)
   Dir.glob("#{dir}/*/*/*/*.txt") do |filename|
     basename = File.basename(filename, '.txt')
     dirname = File.dirname(filename)
-    basename_with_date = dirname.gsub('/', '-').sub(/.*_micro-posts-/, '')
+    basename_with_date = dirname.gsub('/', '-').sub(/.*_micro_posts-/, '')
     date, basename_without_date = basename_with_date.split('_')
     pinyin_basename = PinYin.permlink(basename_without_date).downcase
     md_basename = "#{date}-#{pinyin_basename}"
@@ -16,7 +16,7 @@ def run(dir)
     # puts "date: #{date}"
     # puts "pinyin_basename: #{pinyin_basename}"
     # puts "md_basename: #{md_basename}"
-    puts `mv "#{dirname}/#{basename}.txt" "#{dir}/#{md_basename[0..124]}.md"`
+    puts `mv "#{dirname}/#{basename}.txt" "#{dirname}/#{md_basename[0..124]}.md"`
   end
 end
 
