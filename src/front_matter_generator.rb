@@ -12,7 +12,7 @@ end
 
 def a1_batch_insert_title(dir)
   batch_process_dir(dir) do |filename|
-    use_first_line_as_title(filename)
+    insert_title(filename)
   end
 end
 
