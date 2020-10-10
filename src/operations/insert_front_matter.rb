@@ -13,10 +13,18 @@ end
 
 def use_first_line_as_title(filename)
   first_line = `head -1 "#{filename}"`.sub(/\n/, '')[0..19]
+  return unless first_line != '---'
+
   puts `gsed -i '1 i ---' "#{filename}"`
   puts `gsed -i '1 i ---' "#{filename}"`
-  puts `gsed -i '1 a published: false' "#{filename}"`
   puts `gsed -i '1 a title: "#{first_line}"' "#{filename}"`
+end
+
+def append_images(filename)
+  `echo "\n" >> "#{filename}"`
+  9.times do |i|
+    `echo "![](./#{i + 1}.jpg)" >> "#{filename}"`
+  end
 end
 
 def insert_title(filename)
