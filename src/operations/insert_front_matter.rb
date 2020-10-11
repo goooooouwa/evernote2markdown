@@ -9,6 +9,7 @@ def insert_tag(filename)
 
   puts `gsed -i '1 i ---' "#{filename}"`
   puts `gsed -i '1 i ---' "#{filename}"`
+  # puts `gsed -i '2 a published: false' "#{filename}"`
 end
 
 def use_first_line_as_title(filename)
@@ -18,13 +19,6 @@ def use_first_line_as_title(filename)
   puts `gsed -i '1 i ---' "#{filename}"`
   puts `gsed -i '1 i ---' "#{filename}"`
   puts `gsed -i '1 a title: "#{first_line}"' "#{filename}"`
-end
-
-def append_images(filename)
-  `echo "\n" >> "#{filename}"`
-  9.times do |i|
-    `echo "![](./#{i + 1}.jpg)" >> "#{filename}"`
-  end
 end
 
 def insert_title(filename)

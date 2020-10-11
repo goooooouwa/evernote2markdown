@@ -12,6 +12,16 @@ def rename_micro_posts(dir)
   end
 end
 
+def append_images(dir)
+  Dir.glob("#{dir}/*/*/*/*.md") do |filename|
+    dirname = File.dirname(filename).sub('/Users/sfxu/projects/writings/_micro_posts/', '')
+    `echo "\n" >> "#{filename}"`
+    9.times do |i|
+      `echo '![]({{ "/assets/images/#{dirname}/#{i + 1}.jpg" | relative_url }})' >> "#{filename}"`
+    end
+  end
+end
+
 def generate_md_basename(dirname)
   basename_with_date = dirname.gsub('/', '-').sub(/.*_micro_posts-/, '')
   date, basename_without_date = basename_with_date.split('_')
@@ -30,4 +40,4 @@ def rename_post_folders(dir)
   end
 end
 
-rename_post_folders(ARGV[0])
+append_images(ARGV[0])
