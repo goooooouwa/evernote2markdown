@@ -58,16 +58,16 @@ end
 # 1. md files directory, e.g. path/to/writings/_notes
 def run(dir)
   # ## insert front matter
-  # a1_batch_insert_tag(dir)
+  a1_batch_insert_tag(dir)
   a1_batch_insert_title(dir)
-  # a1_batch_insert_date(dir)
+  a1_batch_insert_date(dir)
 
   # ## transform filename
   # b1_batch_add_current_date_prefix(dir)
   # b1_batch_add_created_date_prefix_by_search(dir)
-  # b2_batch_permlink_filename(dir)
+  b2_batch_permlink_filename(dir)
   # b3_batch_insert_category_from_folder(dir)
-  # b3_batch_insert_and_move_to_category(dir)
+  b3_batch_insert_and_move_to_category(dir)
 end
 
 run(ARGV[0])
