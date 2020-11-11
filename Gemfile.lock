@@ -11,7 +11,7 @@ GEM
     mini_portile2 (2.4.0)
     nokogiri (1.10.2)
       mini_portile2 (~> 2.4.0)
-    rake (12.3.2)
+    rake (13.0.1)
     rb-readline (0.5.5)
     rmmseg-cpp-new (0.3.1)
     rspec (3.7.0)
@@ -27,7 +27,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.0)
-    ruby-debug-ide (0.6.1)
+    ruby-debug-ide (0.7.2)
       rake (>= 0.8.1)
     ruby-pinyin (0.5.0)
       rmmseg-cpp-new (~> 0.3.1)
@@ -51,4 +51,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   1.16.0
+   1.17.3
